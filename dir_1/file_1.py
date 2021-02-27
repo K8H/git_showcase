@@ -10,8 +10,6 @@ import pandas as pd
 import psycopg2
 import requests
 
-from website.predict_fuel_consumption.utils import common
-from website.predict_fuel_consumption.utils.simple_speed import get_simple_art_snippets
 
 FORMAT = '%(asctime)-11s %(module)s.%(funcName)s %(levelname)s: %(message)s'
 logging.basicConfig(format=FORMAT, level=logging.INFO)
@@ -72,7 +70,6 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
                                             headers=headers)), axis=1)
 
     # art_snippets['fuel_cons_pred'] = model.predict(art_snippets[features], batch_size=10000)
-    trips_df['fuel_consumption'] = art_snippets['fuel_cons_pred'].sum()
     logger.info(f"Fuel consumption {trips_df['fuel_consumption'][0]}")
 
     time_points = [dict(slon=float(trips_df["slon"][0]),
@@ -92,7 +89,6 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
     common.execute_query(insert_statement, time_points)
 
     return {
-        "fuel_consumption": trips_df["fuel_consumption"][0]
     }
 
 def create_dict(row):
