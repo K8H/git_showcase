@@ -35,7 +35,6 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
     # TODO verify format in which the date is passed
     trips_df['dept_timestamp'] = pd.to_datetime(trips_df['dept_timestamp'], format='%Y-%m-%d %H:%M:%S')
     tz = psycopg2.tz.FixedOffsetTimezone(offset=0, name=None)
-    trips_df['dept_timestamp'] = pd.DatetimeIndex(trips_df['dept_timestamp']).tz_localize(tz)
 
     base_url = "https://router.hereapi.com/v8/routes"
     params = parse.urlencode({
@@ -86,7 +85,6 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
 
     insert_statement = """insert into  %s(%s) values(%s) ON CONFLICT DO NOTHING""" % (query_hist_tbl, columns, values)
 
-    common.execute_query(insert_statement, time_points)
 
     return {
     }
@@ -100,14 +98,6 @@ def create_dict(row):
 
 
 if __name__=='__main__':
-    event = {'inputs': {
-        'slat': 53.369991,
-        'slon': 9.763927,
-        'elat': 51.664072,
-        'elon': 6.922277,
-        'weight': 54000,
-        'dept_time': datetime(2021, 2, 1, 16, 39, 58)}}
-
     slat = event['inputs']["slat"]
     slon = event['inputs']["slon"]
     elat = event['inputs']["elat"]
