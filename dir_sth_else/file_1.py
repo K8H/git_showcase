@@ -60,13 +60,6 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
     # art_snippets['fuel_cons_pred'] = model.predict(art_snippets[features], batch_size=10000)
     logger.info(f"Fuel consumption {trips_df['fuel_consumption'][0]}")
 
-    time_points = [dict(slon=float(trips_df["slon"][0]),
-                        slat=float(trips_df["slat"][0]),
-                        elon=float(trips_df["elon"][0]),
-                        elat=float(trips_df["elat"][0]),
-                        weight=float(trips_df["weight"][0]),
-                        dept_timestamp=trips_df["dept_timestamp"][0],
-                        fuel_consumption=float(trips_df["fuel_consumption"][0]))]
 
     columns = reduce(lambda col, columns: ', '.join([columns, col]), query_hist_cols)
     values = reduce(lambda col, columns: ')s, %('.join([columns, col]), query_hist_cols)
