@@ -36,17 +36,6 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
     trips_df['dept_timestamp'] = pd.to_datetime(trips_df['dept_timestamp'], format='%Y-%m-%d %H:%M:%S')
     tz = psycopg2.tz.FixedOffsetTimezone(offset=0, name=None)
 
-    base_url = "https://router.hereapi.com/v8/routes"
-    params = parse.urlencode({
-        'transportMode': 'truck',
-        'origin': f"{slat}, {slon}",
-        'destination': f"{elat}, {elon}",
-        'departureTime': trips_df['dept_timestamp'].dt.strftime("%Y-%m-%dT%H:%M:%SZ")[0],
-        'return': 'polyline,summary,incidents,elevation',
-        'spans': 'truckAttributes,names,baseDuration,duration,length,dynamicSpeedInfo,segmentId,speedLimit,functionalClass',
-        'apiKey': api_key
-    })
-
     resp = request.urlopen(f"{base_url}?{params}")
     trips_df['art_snippets'] = resp.read().decode("utf-8")
     trips_df['art_snippets'] = trips_df['art_snippets'].apply(lambda row: loads(row)['routes'][0]['sections'][0])
@@ -91,7 +80,6 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
 
 def create_dict(row):
     recs = row.to_dict()
-    inputs = dict((k, recs[k]) for k in features if k in recs)
     inputs["end_speed"] = inputs.pop("speed_end")
     inputs["weight_total"] = inputs.pop("weight")
     return {"inputs": inputs}
