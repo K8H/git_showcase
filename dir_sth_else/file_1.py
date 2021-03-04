@@ -36,13 +36,6 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
     trips_df['dept_timestamp'] = pd.to_datetime(trips_df['dept_timestamp'], format='%Y-%m-%d %H:%M:%S')
     tz = psycopg2.tz.FixedOffsetTimezone(offset=0, name=None)
 
-    resp = request.urlopen(f"{base_url}?{params}")
-    trips_df['art_snippets'] = resp.read().decode("utf-8")
-    trips_df['art_snippets'] = trips_df['art_snippets'].apply(lambda row: loads(row)['routes'][0]['sections'][0])
-    trips_df['route_length'] = trips_df['art_snippets'].apply(lambda route: route['summary']['length'] / 1000)
-    trips_df = trips_df[trips_df['art_snippets'].apply(lambda route: len(route['spans'])) > 4]
-    trips_df['art_snippets'] = trips_df['art_snippets'].apply(lambda route: get_simple_art_snippets(route))
-
     art_snippets = trips_df.explode('art_snippets').reset_index()
     art_snippets = art_snippets.drop('art_snippets', 1).assign(**art_snippets['art_snippets'].apply(pd.Series))
     art_snippets['avg_speed'] = 3600 * art_snippets['distance_travelled'] / art_snippets['duration']
