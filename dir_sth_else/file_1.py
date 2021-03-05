@@ -53,9 +53,6 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
     # trips['art_snippets'] = trips[['slat', 'slon', 'elat', 'elon', 'fms_timestamp']].apply(
     #     lambda row: call_here_routing(row, "6vIecQ0SYsVSxF7SHHYc0ioxOUUsxVDJrwnNvjqdRiw"), axis=1, meta=dict)
 
-    art_snippets['fuel_cons_pred'] = art_snippets.apply(lambda row: requests.post(resp=requests.post('http://serving.models-dev.tracks:8501/v1/models/mfund:predict',
-                                            data=json.dumps(create_dict(row)),
-                                            headers=headers)), axis=1)
 
     # art_snippets['fuel_cons_pred'] = model.predict(art_snippets[features], batch_size=10000)
     logger.info(f"Fuel consumption {trips_df['fuel_consumption'][0]}")
@@ -64,6 +61,8 @@ def fuel_consumption_prediction(slat, slon, elat, elon, weight, dept_time):
     columns = reduce(lambda col, columns: ', '.join([columns, col]), query_hist_cols)
     values = reduce(lambda col, columns: ')s, %('.join([columns, col]), query_hist_cols)
     values = '%(' + values + ')s'
+
+    print('hi there')
 
     insert_statement = """insert into  %s(%s) values(%s) ON CONFLICT DO NOTHING""" % (query_hist_tbl, columns, values)
 
