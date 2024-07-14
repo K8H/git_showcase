@@ -1,5 +1,5 @@
-import shared.team_1_dir.i_can as i_can
+from shared.team_1_dir import team_1_func
 
 
 def test_i_can():
-    assert i_can.team_1_func() == 1
+    assert team_1_func() == 1
