@@ -4,13 +4,16 @@ on:
   pull_request:
     branches:
       - master
-    types: [opened, review_requested]
+    types: [opened, reopened, review_requested]
   merge_group:
 
 jobs:
   shared-tests:
     name: Shared Test Suite
     runs-on: ubuntu-22.04
+    defaults:
+      run:
+        working-directory: .
 
     steps:
       - name: Checkout
@@ -30,6 +33,5 @@ jobs:
           pip install -r requirements-dev.txt
 
       - name: Run tests shared
-        working-directory: .
         run: |
           pytest
