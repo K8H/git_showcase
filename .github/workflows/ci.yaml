@@ -29,7 +29,7 @@ jobs:
           pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests data services
-        working-directory: services
+      - name: Run tests shared
+        working-directory: shared
         run: |
           pytest
