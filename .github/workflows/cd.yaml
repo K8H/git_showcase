@@ -15,7 +15,7 @@ jobs:
 
       - name: set lower case owner name
         run: |
-          echo "REPO_OWNER=${{ github.repository_owner }}" >>${GITHUB_ENV}
+          echo "REPO_OWNER=${{ github.repository_owner }} | tr '[:upper:]' '[:lower:]'`" >>${GITHUB_ENV}
 
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v1
