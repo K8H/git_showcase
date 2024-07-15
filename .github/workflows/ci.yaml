@@ -27,10 +27,9 @@ jobs:
           cache-dependency-path: shared/requirements.txt
 
       - name: Install dependencies shared
-        working-directory: shared
         run: |
           pip install --upgrade pip
-          pip install -r requirements-dev.txt
+          pip install -r shared/requirements-dev.txt
 
       - name: Run tests shared
         run: |
