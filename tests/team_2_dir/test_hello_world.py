@@ -1,5 +1,5 @@
-import shared.team_2_dir.hello_world as hello
+from shared.team_2_dir import team_2
 
 
 def test_i_can():
-    assert hello.team_2() == "hello team 2"
+    assert team_2() == "hello team 2"
