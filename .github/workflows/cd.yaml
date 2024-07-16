@@ -43,8 +43,6 @@ jobs:
         id: changelog
         with:
           github-token: ${{ github.token }}
-          git-user-name: "github-actions[bot]"
-          git-user-email: "github-actions[bot]@users.noreply.github.com"
           git-branch: ${{ env.PR_BRANCH }}
           skip-git-pull: true
           output-file: false
