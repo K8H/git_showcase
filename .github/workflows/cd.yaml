@@ -19,6 +19,12 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    outputs:
+      skipped: ${{ steps.changelog.outputs.skipped }}
+      tag: ${{ steps.changelog.outputs.tag }}
+      clean_changelog: ${{ steps.changelog.outputs.clean_changelog }}
+      version: ${{ steps.changelog.outputs.version }}
+
     steps:
       - name: Check out the repository
         uses: actions/checkout@v2
