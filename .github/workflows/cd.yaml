@@ -49,6 +49,8 @@ jobs:
         with:
           github-token: ${{ github.token }}
           git-branch: ${{ env.PR_BRANCH }}
+          git-user-name: ${{ github.repository_owner }}
+          git-user-email: "k8hofmann@gmail.com"
           skip-git-pull: true
           output-file: false
           version-file: .github/package.yaml
