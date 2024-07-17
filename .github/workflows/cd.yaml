@@ -11,10 +11,7 @@ env:
 
 jobs:
   build:
-    permissions:
-      packages: write
-      contents: write
-      pull-requests: write
+    permissions: write-all
 
     runs-on: ubuntu-latest
 
