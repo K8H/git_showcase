@@ -1,5 +1,4 @@
-name: Publish Docker image
-
+name: CD
 on:
   push:
     branches:
@@ -31,11 +30,6 @@ jobs:
       - name: Create Branch
         run: |
           git checkout -b ${{ env.PR_BRANCH }}
-
-      - name: Set up Git
-        run: |
-          git config user.name "${{ github.repository_owner }}"
-          git config user.email "k8hofmann@gmail.com"
 
       - name: Downcase github.repository_owner
         run: |
