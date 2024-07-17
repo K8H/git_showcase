@@ -41,7 +41,7 @@ jobs:
         uses: TriPSs/conventional-changelog-action@v5
         id: changelog
         with:
-          github-token: ${{ github.token }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}"
           git-branch: ${{ env.PR_BRANCH }}
           git-user-name: ${{ github.repository_owner }}
           git-user-email: "k8hofmann@gmail.com"
