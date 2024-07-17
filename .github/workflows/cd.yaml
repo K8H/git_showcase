@@ -31,6 +31,7 @@ jobs:
       - name: Create Branch
         run: |
           git checkout -b ${{ env.PR_BRANCH }}
+          git push --set-upstream origin ${{ env.PR_BRANCH }}
 
       - name: Downcase github.repository_owner
         run: |
