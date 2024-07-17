@@ -8,7 +8,6 @@ on:
 
 env:
   REPO_NAME: ${{ github.repository }}
-  REPO_OWNER: ${GITHUB_REPOSITORY_OWNER@L}
   PR_BRANCH: release-ci-${{ github.sha }}
 
 jobs:
@@ -28,6 +27,12 @@ jobs:
     steps:
       - name: Check out the repository
         uses: actions/checkout@v2
+
+      - name: Downcase github.repository_owner
+        run: |
+          echo "REPO_OWNER=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_ENV
+        env:
+          GITHUB_REPOSITORY_OWNER: '${{ github.repository_owner }}'
 
       - name: Create Branch
         run: |
