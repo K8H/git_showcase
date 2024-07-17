@@ -28,15 +28,20 @@ jobs:
       - name: Check out the repository
         uses: actions/checkout@v4
 
+      - name: Create Branch
+        run: |
+          git checkout -b ${{ env.PR_BRANCH }}
+
+      - name: Set up Git
+        run: |
+          git config user.name "${{ github.repository_owner }}"
+          git config user.email "k8hofmann@gmail.com"
+
       - name: Downcase github.repository_owner
         run: |
           echo "REPO_OWNER=${GITHUB_REPOSITORY_OWNER@L}" >> $GITHUB_ENV
         env:
           GITHUB_REPOSITORY_OWNER: '${{ github.repository_owner }}'
-
-      - name: Create Branch
-        run: |
-          git checkout -b ${{ env.PR_BRANCH }}
 
       - name: Create Changelog
         uses: TriPSs/conventional-changelog-action@v5
