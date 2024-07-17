@@ -4,7 +4,7 @@ on:
   pull_request:
     branches:
       - master
-    types: [opened, reopened, review_requested]
+    types: [review_requested, assigned]
   merge_group:
 
 jobs:
