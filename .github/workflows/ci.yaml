@@ -13,6 +13,7 @@ jobs:
 
     outputs:
       is_bot: ${{ steps.is_auth_bot.outputs.is_bot }}
+      author: ${{ steps.get_author.outputs.author }}
 
     steps:
       - name: Checkout code
