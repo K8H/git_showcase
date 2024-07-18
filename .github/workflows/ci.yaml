@@ -11,6 +11,14 @@ env:
   AUTH_BOT: ${{ false }}
 
 jobs:
+  get-env-vars:
+    name: Get Environment vars
+    runs-on: some-runner
+    outputs:
+      AUTH_BOT: ${{ env.AUTH_BOT }}
+    steps:
+      - run: echo "null"
+
   check-author:
     runs-on: ubuntu-latest
 
@@ -25,13 +33,13 @@ jobs:
 
       - name: Bypass status checks if PR is from a bot
         if: ${{ startsWith(steps.get_author.outputs.author, 'github-actions') }}
-        run: echo "Skipping status checks for bot PR"
-        env:
-          AUTH_BOT: 'true'
+        run: |
+          echo "Skipping status checks for bot PR"
+          needs.get-env.outputs.AUTH_BOT = 'true'
 
   shared-tests:
     name: Shared Test Suite
-    if: ${{ env.AUTH_BOT == 'false' }}
+    if: ${{ needs.get-env.outputs.AUTH_BOT == 'false' }}
     runs-on: ubuntu-22.04
     defaults:
       run:
