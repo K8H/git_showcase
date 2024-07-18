@@ -7,18 +7,7 @@ on:
     types: [review_requested, assigned]
   merge_group:
 
-env:
-  AUTH_BOT: ${{ false }}
-
 jobs:
-  get-env-vars:
-    name: Get Environment vars
-    runs-on: some-runner
-    outputs:
-      AUTH_BOT: ${{ env.AUTH_BOT }}
-    steps:
-      - run: echo "null"
-
   check-author:
     runs-on: ubuntu-latest
 
@@ -31,15 +20,32 @@ jobs:
         run: |
           echo "author=$(jq -r .pull_request.user.login < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
 
+      - name: Check if author is a bot
+        id: is_bot
+        run: |
+          if [[ "${{ steps.get_author.outputs.author }}" == *"[bot]" ]]; then
+            echo "::set-output name=is_bot::true"
+          else
+            echo "::set-output name=is_bot::false"
+          fi
+
       - name: Bypass status checks if PR is from a bot
-        if: ${{ startsWith(steps.get_author.outputs.author, 'github-actions') }}
+        if: steps.is_bot.outputs.is_bot == 'true'
         run: |
           echo "Skipping status checks for bot PR"
-          needs.get-env.outputs.AUTH_BOT = 'true'
+        env:
+          AUTH_BOT = 'true'
+
+      - name: Bypass status checks if PR is from a bot
+        if: steps.is_bot.outputs.is_bot == 'false'
+        run: |
+          echo "Skipping status checks for bot PR"
+        env:
+          AUTH_BOT = 'false'
 
   shared-tests:
     name: Shared Test Suite
-    if: ${{ needs.get-env.outputs.AUTH_BOT == 'false' }}
+    if: ${{ env.AUTH_BOT == 'false' }}
     runs-on: ubuntu-22.04
     defaults:
       run:
