@@ -34,14 +34,14 @@ jobs:
         run: |
           echo "Skipping status checks for bot PR"
         env:
-          AUTH_BOT = 'true'
+          AUTH_BOT: 'true'
 
       - name: Bypass status checks if PR is from a bot
         if: steps.is_bot.outputs.is_bot == 'false'
         run: |
           echo "Skipping status checks for bot PR"
         env:
-          AUTH_BOT = 'false'
+          AUTH_BOT: 'false'
 
   shared-tests:
     name: Shared Test Suite
