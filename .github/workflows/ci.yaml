@@ -43,7 +43,8 @@ jobs:
 
   shared-tests:
     name: Shared Test Suite
-    if: needs.check-author.outputs.is_bot == 'false'
+    needs: check-author
+    if: ( needs.check-author.outputs.is_bot == 'false' )
     runs-on: ubuntu-22.04
     defaults:
       run:
