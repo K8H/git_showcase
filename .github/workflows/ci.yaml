@@ -34,7 +34,7 @@ jobs:
       - name: Check if author is a bot
         id: is_auth_bot
         run: |
-          if [[ "${{ steps.get-author.outputs.author }}" == *"[bot]" ]]; then
+          if [[ "${{ steps.get-author.outputs.author }}" == "github-actions"* ]]; then
             echo "is_bot=true" >> $GITHUB_OUTPUT
           else
             echo "is_bot=false" >> $GITHUB_OUTPUT
