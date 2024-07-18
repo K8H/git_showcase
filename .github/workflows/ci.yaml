@@ -29,7 +29,7 @@ jobs:
       - name: Get PR author
         id: get_author
         run: |
-          echo "::set-output name=author::$(jq -r .pull_request.user.login < $GITHUB_EVENT_PATH)"
+          echo "author=$(jq -r .pull_request.user.login < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
 
       - name: Bypass status checks if PR is from a bot
         if: ${{ startsWith(steps.get_author.outputs.author, 'github-actions') }}
