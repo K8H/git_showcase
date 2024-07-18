@@ -31,7 +31,7 @@ jobs:
 
   shared-tests:
     name: Shared Test Suite
-    if: (env.AUTH_BOT == 'false')
+    if: (${{ env.AUTH_BOT }} == 'false')
     runs-on: ubuntu-22.04
     defaults:
       run:
