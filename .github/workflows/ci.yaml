@@ -8,8 +8,43 @@ on:
   merge_group:
 
 jobs:
+  check-author:
+    runs-on: ubuntu-latest
+
+    outputs:
+      is_bot: ${{ steps.is_auth_bot.outputs.is_bot }}
+      pr_author: ${{ steps.get-author.outputs.author }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get PR author
+        id: get_author
+        run: |          
+          echo "author=$(jq -r .pull_request.user.login < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
+
+      - name: Get PR author
+        id: get-author
+        run: |
+          pr_author=$(jq -r '.pull_request.user.login' < "$GITHUB_EVENT_PATH")
+          echo "PR author is $pr_author"
+          echo "author=$pr_author" >> $GITHUB_OUTPUT
+
+      - name: Check if author is a bot
+        id: is_auth_bot
+        run: |
+          if [[ "${{ steps.get-author.outputs.author }}" == *"[bot]" ]]; then
+            echo "is_bot=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_bot=false" >> $GITHUB_OUTPUT
+          fi
+          
+
   shared-tests:
     name: Shared Test Suite
+    needs: check-author
+    if: ( needs.check-author.outputs.is_bot == 'false' )
     runs-on: ubuntu-22.04
     defaults:
       run:
