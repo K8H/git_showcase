@@ -7,6 +7,9 @@ on:
     types: [review_requested, assigned]
   merge_group:
 
+env:
+  AUTH_BOT: 'false'
+
 jobs:
   check-author:
     runs-on: ubuntu-latest
