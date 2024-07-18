@@ -11,6 +11,9 @@ jobs:
   check-author:
     runs-on: ubuntu-latest
 
+    outputs:
+      is_bot: ${{ steps.is_auth_bot.outputs.is_bot }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -24,14 +27,14 @@ jobs:
         id: is_auth_bot
         run: |
           if [[ "${{ steps.get_author.outputs.author }}" == *"[bot]" ]]; then
-            echo "IS_BOT=true" >> $GITHUB_ENV
+            echo "is_bot=true" >> $GITHUB_OUTPUT
           else
-            echo "IS_BOT=false" >> $GITHUB_ENV
+            echo "is_bot=false" >> $GITHUB_OUTPUT
           fi
 
   shared-tests:
     name: Shared Test Suite
-    if: ${{ env.IS_BOT == 'false' }}
+    if: needs.check-author.outputs.is_bot == 'false'
     runs-on: ubuntu-22.04
     defaults:
       run:
