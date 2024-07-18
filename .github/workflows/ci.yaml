@@ -7,9 +7,6 @@ on:
     types: [review_requested, assigned]
   merge_group:
 
-env:
-  AUTH_BOT: 'false'
-
 jobs:
   check-author:
     runs-on: ubuntu-latest
@@ -24,31 +21,17 @@ jobs:
           echo "author=$(jq -r .pull_request.user.login < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
 
       - name: Check if author is a bot
-        id: is_bot
+        id: is_auth_bot
         run: |
           if [[ "${{ steps.get_author.outputs.author }}" == *"[bot]" ]]; then
-            echo "::set-output name=is_bot::true"
+            echo "IS_BOT=true" >> $GITHUB_ENV
           else
-            echo "::set-output name=is_bot::false"
+            echo "IS_BOT=false" >> $GITHUB_ENV
           fi
-
-      - name: Bypass status checks if PR is from a bot
-        if: steps.is_bot.outputs.is_bot == 'true'
-        run: |
-          echo "Skipping status checks for bot PR"
-        env:
-          AUTH_BOT: 'true'
-
-      - name: Bypass status checks if PR is from a bot
-        if: steps.is_bot.outputs.is_bot == 'false'
-        run: |
-          echo "Skipping status checks for bot PR"
-        env:
-          AUTH_BOT: 'false'
 
   shared-tests:
     name: Shared Test Suite
-    if: ${{ env.AUTH_BOT == 'false' }}
+    if: ${{ env.IS_BOT == 'false' }}
     runs-on: ubuntu-22.04
     defaults:
       run:
