@@ -13,7 +13,7 @@ jobs:
 
     outputs:
       is_bot: ${{ steps.is_auth_bot.outputs.is_bot }}
-      author: ${{ steps.get_author.outputs.author }}
+      pr_author: ${{ steps.get-author.outputs.author }}
 
     steps:
       - name: Checkout code
@@ -21,17 +21,25 @@ jobs:
 
       - name: Get PR author
         id: get_author
-        run: |
+        run: |          
           echo "author=$(jq -r .pull_request.user.login < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
+
+      - name: Get PR author
+        id: get-author
+        run: |
+          pr_author=$(jq -r '.pull_request.user.login' < "$GITHUB_EVENT_PATH")
+          echo "PR author is $pr_author"
+          echo "author=$pr_author" >> $GITHUB_OUTPUT
 
       - name: Check if author is a bot
         id: is_auth_bot
         run: |
-          if [[ "${{ steps.get_author.outputs.author }}" == *"[bot]" ]]; then
+          if [[ "${{ steps.get-author.outputs.author }}" == *"[bot]" ]]; then
             echo "is_bot=true" >> $GITHUB_OUTPUT
           else
             echo "is_bot=false" >> $GITHUB_OUTPUT
           fi
+          
 
   shared-tests:
     name: Shared Test Suite
