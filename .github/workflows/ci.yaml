@@ -7,6 +7,9 @@ on:
     types: [review_requested, assigned]
   merge_group:
 
+env:
+  AUTH_BOT: 'false'
+
 jobs:
   check-author:
     runs-on: ubuntu-latest
@@ -23,13 +26,12 @@ jobs:
       - name: Bypass status checks if PR is from a bot
         if: ${{ startsWith(steps.get_author.outputs.author, 'github-actions') }}
         run: echo "Skipping status checks for bot PR"
-
-      - name: Fail if not from a bot
-        if: ${{ !startsWith(steps.get_author.outputs.author, 'github-actions') }}
-        run: exit 1
+        env:
+            AUTH_BOT: 'true'
 
   shared-tests:
     name: Shared Test Suite
+    if: (env.AUTH_BOT == 'false')
     runs-on: ubuntu-22.04
     defaults:
       run:
