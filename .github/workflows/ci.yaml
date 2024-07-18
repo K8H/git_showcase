@@ -8,7 +8,7 @@ on:
   merge_group:
 
 env:
-  AUTH_BOT: 'false'
+  AUTH_BOT: ${{ false }}
 
 jobs:
   check-author:
@@ -31,7 +31,7 @@ jobs:
 
   shared-tests:
     name: Shared Test Suite
-    if: (${{ env.AUTH_BOT }} == 'false')
+    if: (${{ env.AUTH_BOT == false }})
     runs-on: ubuntu-22.04
     defaults:
       run:
