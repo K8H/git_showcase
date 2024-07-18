@@ -22,7 +22,7 @@ jobs:
 
       - name: Get PR author
         id: get_author
-        run: |          
+        run: |
           echo "author=$(jq -r .pull_request.user.login < $GITHUB_EVENT_PATH)" >> $GITHUB_OUTPUT
 
       - name: Get PR author
@@ -40,7 +40,6 @@ jobs:
           else
             echo "is_bot=false" >> $GITHUB_OUTPUT
           fi
-          
 
   shared-tests:
     name: Shared Test Suite

@@ -1,3 +1,4 @@
 -r requirements.txt
 pytest==8.2.2
-pytest-cov==5.0.0
+pytest-cov~=5.0
+shared~=1.3
