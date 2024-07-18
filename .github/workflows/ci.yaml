@@ -27,7 +27,7 @@ jobs:
         if: ${{ startsWith(steps.get_author.outputs.author, 'github-actions') }}
         run: echo "Skipping status checks for bot PR"
         env:
-            AUTH_BOT: 'true'
+          AUTH_BOT: 'true'
 
   shared-tests:
     name: Shared Test Suite
