@@ -8,6 +8,26 @@ on:
   merge_group:
 
 jobs:
+  check-author:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get PR author
+        id: get_author
+        run: |
+          echo "::set-output name=author::$(jq -r .pull_request.user.login < $GITHUB_EVENT_PATH)"
+
+      - name: Bypass status checks if PR is from a bot
+        if: ${{ startsWith(steps.get_author.outputs.author, 'github-actions') }}
+        run: echo "Skipping status checks for bot PR"
+
+      - name: Fail if not from a bot
+        if: ${{ !startsWith(steps.get_author.outputs.author, 'github-actions') }}
+        run: exit 1
+
   shared-tests:
     name: Shared Test Suite
     runs-on: ubuntu-22.04
